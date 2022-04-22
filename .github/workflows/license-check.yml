@@ -1,0 +1,27 @@
+name: License Check
+on: [push, pull_request]
+jobs:
+  Start-Checking:
+    runs-on: ubuntu-latest
+    
+    services:
+      fossology:
+        image: fossology/fossology:3.10.0
+        ports:
+        - 8081:80
+    
+    steps:
+      - name: Get license engine
+        uses: actions/checkout@v3
+        with:
+            repository: OpenTOSCA/license-engine
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn package
+      - name: Start License Engine
+        run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME
+
