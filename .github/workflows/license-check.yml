@@ -42,6 +42,8 @@ jobs:
           route: GET /repos/{owner}/{repo}/license
           owner: octokit
           repo: request-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo defined license: ${{ steps.get_defined_license.outputs.data }}"
 
       - name: Start License Engine
