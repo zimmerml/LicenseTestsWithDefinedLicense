@@ -34,6 +34,15 @@ jobs:
         with:
           file-url: 'https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/.license_ignorefiles'
           file-name: '.license_ignorefiles'
+          
+      - name: Get defined license
+        uses: octokit/request-action@v2.x
+        id: get_defined_license
+        with:
+          route: GET /repos/{owner}/{repo}/license
+          owner: octokit
+          repo: request-action
+      - run: "echo defined license: ${{ steps.get_defined_license.outputs.data }}"
 
       - name: Start License Engine
         run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME
