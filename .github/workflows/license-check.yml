@@ -44,7 +44,7 @@ jobs:
           repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo defined license: ${{ steps.get_defined_license.outputs.data }}"
+      - run: "echo defined license: ${{ fromJson(steps.get_defined_license.outputs.data).license.spdx_id }}"
 
       - name: Start License Engine
         run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME
