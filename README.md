@@ -1,3 +1,5 @@
+[![Check Licenses](https://github.com/zimmerml/LicenseTestsWithDefinedLicense/actions/workflows/main.yml/badge.svg)](https://github.com/zimmerml/LicenseTestsWithDefinedLicense/actions/workflows/main.yml)
+
 # LicenseTests
 
 Just a simple repository to test discovering licenses as well as checking their compatibility.
