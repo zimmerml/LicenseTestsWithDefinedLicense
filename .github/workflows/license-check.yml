@@ -25,10 +25,10 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           
-      - name: Build with Maven
+      - name: Build license engine with Maven
         run: mvn package
         
-      - name: Download a file
+      - name: Download .license_ignorefiles file
         continue-on-error: true
         uses: carlosperate/download-file-action@v1
         with:
@@ -37,15 +37,15 @@ jobs:
           
       - name: Get defined license
         uses: octokit/request-action@v2.x
-        id: get_defined_license
+        id: get_repo_license
         with:
           route: GET /repos/${{ github.repository }}/license 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Check defined license
-        run: "echo defined license: ${{ fromJson(steps.get_defined_license.outputs.data).license.spdx_id }}"
+        run: "echo defined license: ${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}"
 
-      - name: Start License Engine
+      - name: Run License Engine
         run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME --license=${{ fromJson(steps.get_defined_license.outputs.data).license.spdx_id }}
 
