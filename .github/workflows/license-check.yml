@@ -44,6 +44,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
+      - name: Show status
+        run: "echo status: ${{ steps.get_repo_license.status }}"
+          
+      - name: Set license variable
+        continue-on-error: true
+        run: echo "LICENSE=${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}" >> $GITHUB_ENV
+          
       - name: Check defined license
         continue-on-error: true
         run: "echo defined license: ${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}"
