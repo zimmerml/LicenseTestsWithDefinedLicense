@@ -45,6 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Check defined license
+        continue-on-error: true
         run: "echo defined license: ${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}"
 
       - name: Run License Engine
