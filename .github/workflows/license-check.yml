@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DefinedLicense: ""
+      DefinedLicense: "null"
       
     services:
       fossology:
@@ -47,17 +47,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Show status
-        run: "echo status: ${{ steps.get_repo_license.outputs.status }}"
-          
-      - name: Set license variable
+      - name: Run License Engine with predefined license to be checked against
         if: ${{ steps.get_repo_license.outputs.status != '404' }}
-        run: echo "LICENSE=${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}" >> $GITHUB_ENV
-          
-      - name: Check defined license
-        if: ${{ steps.get_repo_license.outputs.status != '404' }}
-        run: "echo defined license: ${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}"
-
-      - name: Run License Engine
-        run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME --license=$DefinedLicense
+        run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME --license=${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}
+        
+      - name: Run License Engine without predefined license to be checked against
+        if: ${{ steps.get_repo_license.outputs.status == '404' }}
+        run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME
 
