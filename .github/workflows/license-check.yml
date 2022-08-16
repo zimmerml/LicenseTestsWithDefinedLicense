@@ -45,7 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Show status
-        run: "echo status: ${{ steps.get_repo_license.status }}"
+        run: "echo status: ${{ steps.get_repo_license.outputs.status }}"
           
       - name: Set license variable
         continue-on-error: true
