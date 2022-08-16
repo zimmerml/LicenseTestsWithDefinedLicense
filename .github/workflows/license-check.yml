@@ -39,19 +39,19 @@ jobs:
           file-name: '.license_ignorefiles'
           
       - name: Get defined license
-        continue-on-error: true
-        uses: octokit/request-action@v2.x
         id: get_repo_license
+        continue-on-error: true
+        uses: octokit/request-action@v2.x        
         with:
           route: GET /repos/${{ github.repository }}/license 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Run License Engine with predefined license to be checked against
-        if: ${{ steps.get_repo_license.outputs.status != '404' }}
+        if: steps.get_repo_license.outcome == 'success'
         run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME --license=${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}
         
       - name: Run License Engine without predefined license to be checked against
-        if: ${{ steps.get_repo_license.outputs.status == '404' }}
+        if: steps.get_repo_license.outcome != 'success'
         run: java -jar target/licenseengine-0.0.1-SNAPSHOT.jar --repo=$GITHUB_REPOSITORY --branch=$GITHUB_REF_NAME
 
