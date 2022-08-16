@@ -36,6 +36,7 @@ jobs:
           file-name: '.license_ignorefiles'
           
       - name: Get defined license
+        continue-on-error: true
         uses: octokit/request-action@v2.x
         id: get_repo_license
         with:
