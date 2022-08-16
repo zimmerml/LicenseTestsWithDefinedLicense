@@ -48,11 +48,11 @@ jobs:
         run: "echo status: ${{ steps.get_repo_license.outputs.status }}"
           
       - name: Set license variable
-        continue-on-error: true
+        if: ${{ steps.get_repo_license.outputs.status != '404' }}
         run: echo "LICENSE=${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}" >> $GITHUB_ENV
           
       - name: Check defined license
-        continue-on-error: true
+        if: ${{ steps.get_repo_license.outputs.status != '404' }}
         run: "echo defined license: ${{ fromJson(steps.get_repo_license.outputs.data).license.spdx_id }}"
 
       - name: Run License Engine
