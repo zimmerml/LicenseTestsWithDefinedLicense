@@ -39,9 +39,7 @@ jobs:
         uses: octokit/request-action@v2.x
         id: get_defined_license
         with:
-          route: GET /repos/{owner}/{repo}/license
-          owner: octokit
-          repo: request-action
+          route: GET /repos/${{ github.repository }}/license 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
